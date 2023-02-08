@@ -105,3 +105,35 @@ def dou(url: str):
         errors.append({'url': url, 'title': 'Page do not response'})
 
     return jobs, errors
+
+
+def djinni(url: str):
+    domain = 'https://djinni.co'
+    resp = requests.get(url, headers=headers[randint(0, 2)])
+
+    jobs = []
+    errors = []
+
+    if resp.status_code == 200:
+        soup = BS(resp.content, 'html.parser')
+        main_ul = soup.find('ul', attrs={'class': 'list-jobs'})
+        li_list = main_ul.find_all('li', attrs={'class': 'list-jobs__item'})
+        if main_ul:
+            for li in li_list:
+                link = li.find('div', attrs={'class': 'list-jobs__title'})
+                title = link
+                href = link.a['href']
+                description = li.find('div', attrs={'class': 'truncated mw-100 fz-16 mb-0 js-show-more'})
+                company = li.find('div', attrs={'class': 'list-jobs__details__info'}).a
+
+                jobs.append({'title': title.text,
+                             'url': domain + href,
+                             'descriptions': description.text,
+                             'company': company.text
+                             })
+        else:
+            errors.append({'url': url, 'title': 'Div does not exist'})
+    else:
+        errors.append({'url': url, 'title': 'Page do not response'})
+
+    return jobs, errors
