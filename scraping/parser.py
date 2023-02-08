@@ -73,3 +73,35 @@ def rabota(url: str):
         errors.append({'url': url, 'title': 'Page do not response'})
 
     return jobs, errors
+
+
+def dou(url: str):
+    resp = requests.get(url, headers=headers[randint(0, 2)])
+
+    jobs = []
+    errors = []
+
+    if resp.status_code == 200:
+        soup = BS(resp.content, 'html.parser')
+        main_div = soup.find('div', id='vacancyListId')
+
+        if main_div:
+            li_list = main_div.find_all('li', attrs={'class': 'l-vacancy'})
+            for li in li_list:
+                _title = li.find('div', attrs={'class': 'title'}).a
+                title = _title.text
+                href = _title['href']
+                company = li.find('a', attrs={'class': 'company'}).text  # .strip()
+                description = li.find('div', attrs={'class': 'sh-info'}).text  # .strip()
+
+                jobs.append({'title': title,
+                             'url': href,
+                             'descriptions': description,
+                             'company': company
+                             })
+        else:
+            errors.append({'url': url, 'title': 'Div does not exist'})
+    else:
+        errors.append({'url': url, 'title': 'Page do not response'})
+
+    return jobs, errors
