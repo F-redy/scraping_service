@@ -34,3 +34,20 @@ class Language(models.Model):
     class Meta:
         verbose_name = 'Язык программирования'
         verbose_name_plural = 'Языки программирования'
+
+
+class Vacancy(models.Model):
+    url = models.URLField(unique=True)
+    title = models.CharField('Заголовок вакансии', max_length=255)
+    company = models.CharField('Компания', max_length=255)
+    description = models.TextField('Описание вакансии')
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='Город')
+    language = models.ForeignKey('Language', on_delete=models.CASCADE, verbose_name='Язык программирования')
+    date_create = models.DateField('Время создания', auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Вакансия'
+        verbose_name_plural = 'Вакансии'
