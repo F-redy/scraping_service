@@ -43,3 +43,33 @@ def work(url: str):
         errors.append({'url': url, 'title': 'Page do not response'})
 
     return jobs, errors
+
+
+def rabota(url: str):
+    domain = 'https://rabota.ua/'
+    resp = requests.get(url, headers=headers[randint(0, 2)])
+
+    jobs = []
+    errors = []
+
+    if resp.status_code == 200:
+        data = resp.json()
+        if data:
+            for d in data['documents']:
+                full_url = None
+                if d.get('notebookId') and d.get('id'):
+                    full_url = f"{domain}company{d['notebookId']}/vacancy{d['id']}"
+
+                jobs.append({
+                    'title': d.get('name'),
+                    'city': d.get('cityName'),
+                    'company': d.get('companyName'),
+                    'url': full_url,
+                    'description': d.get('description'),
+                })
+        else:
+            errors.append({'url': url, 'title': 'Data does not exist'})
+    else:
+        errors.append({'url': url, 'title': 'Page do not response'})
+
+    return jobs, errors
