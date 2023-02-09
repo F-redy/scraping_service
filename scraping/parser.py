@@ -15,7 +15,7 @@ headers = [
 
 
 def work(url: str):
-    domain = 'https://www.work.ua/'
+    domain = 'https://www.work.ua'
     resp = requests.get(url, headers=headers[randint(0, 2)])
 
     jobs = []
@@ -30,13 +30,10 @@ def work(url: str):
                 title = div.find('h2')
                 href = title.a['href']
                 description = div.p.text
-                company = 'No name'
-                logo = div.find('img')
-                if logo:
-                    company = logo['alt']
+                company = div.find('div', attrs={'class': 'add-top-xs'}).find('span').b.text
                 jobs.append({'title': title.text,
                              'url': domain + href,
-                             'descriptions': description,
+                             'description': description,
                              'company': company
                              })
         else:
@@ -64,7 +61,6 @@ def rabota(url: str):
 
                 jobs.append({
                     'title': d.get('name'),
-                    'city': d.get('cityName'),
                     'company': d.get('companyName'),
                     'url': full_url,
                     'description': d.get('description'),
@@ -98,7 +94,7 @@ def dou(url: str):
 
                 jobs.append({'title': title,
                              'url': href,
-                             'descriptions': description,
+                             'description': description,
                              'company': company
                              })
         else:
@@ -130,7 +126,7 @@ def djinni(url: str):
 
                 jobs.append({'title': title.text,
                              'url': domain + href,
-                             'descriptions': description.text,
+                             'description': description.text,
                              'company': company.text
                              })
         else:
