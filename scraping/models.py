@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.text import slugify
 
 
+def default_urls():
+    return {'work': '', 'rabota': '', 'dou': '', 'djinni': ''}
+
+
 class City(models.Model):
     name = models.CharField('Название населенного пункта', max_length=100, unique=True)
     slug = models.SlugField('url', max_length=100, unique=True, blank=True)
@@ -59,3 +63,14 @@ class Error(models.Model):
 
     def __str__(self):
         return str(self.timestamp)
+
+
+class Url(models.Model):
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='Город')
+    language = models.ForeignKey('Language', on_delete=models.CASCADE, verbose_name='Язык программирования')
+    url_data = models.JSONField(default=default_urls)
+
+    def __str__(self):
+        return f"{self.city} - {self.language}"
+    class Meta:
+        unique_together = ("city", "language")
