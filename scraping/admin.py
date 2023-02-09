@@ -26,3 +26,7 @@ class VacancyAdmin(admin.ModelAdmin):
     list_display_links = ('title',)
     search_fields = ('title', 'city', 'language')
     list_filter = ('title', 'city', 'language')
+
+
+admin.site.register(Error)
+admin.site.register(Url)
