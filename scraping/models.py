@@ -55,6 +55,7 @@ class Vacancy(models.Model):
     class Meta:
         verbose_name = 'Вакансия'
         verbose_name_plural = 'Вакансии'
+        ordering = ['-date_create']
 
 
 class Error(models.Model):
@@ -72,5 +73,6 @@ class Url(models.Model):
 
     def __str__(self):
         return f"{self.city} - {self.language}"
+
     class Meta:
         unique_together = ("city", "language")
