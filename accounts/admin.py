@@ -57,6 +57,7 @@ class UserAdmin(BaseUserAdmin):
     # that reference specific fields on auth.User.
     list_display = ('email', 'is_admin', 'language', 'city', 'send_email')
     list_filter = ('is_admin',)
+    list_editable = ('language', 'city')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Setings', {'fields': ('language', 'city', 'send_email')}),
